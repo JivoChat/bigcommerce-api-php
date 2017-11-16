@@ -389,7 +389,7 @@ class Connection
         $this->addHeader('Content-Type', $this->getContentType());
 
         if (!is_string($body)) {
-            $body = json_encode($body);
+            $body = json_encode($body, JSON_UNESCAPED_SLASHES);
         }
 
         $this->initializeRequest();
