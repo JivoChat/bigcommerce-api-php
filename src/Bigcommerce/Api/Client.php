@@ -50,7 +50,7 @@ class Client
      *
      * @var string
      */
-    static private $path_prefix = '/api/v3';
+    static private $path_prefix = '/api/v2';
 
     /**
      * Full URL path to the configured store API.
@@ -62,7 +62,7 @@ class Client
     static private $store_hash;
     static private $auth_token;
     static private $client_secret;
-    static private $stores_prefix = '/stores/%s/v3';
+    static private $stores_prefix = '/stores/%s/v2';
     static private $api_url = 'https://api.bigcommerce.com';
     static private $login_url = 'https://login.bigcommerce.com';
 
@@ -2013,8 +2013,18 @@ class Client
         return self::deleteResource('/shipping/zones/'. $zoneId . '/methods/'. $methodId);
     }
 
+    /**
+     * Create a script via API v3
+     *
+     * @param $object
+     * @return mixed
+     */
     public static function createScript($object)
     {
-        return Client::createResource('/content/scripts', $object);
+        if (is_array($object)) {
+            $object = (object)$object;
+        }
+        $url = self::$api_url . sprintf('/stores/%s/v3', self::$store_hash);
+        return self::connection()->post($url . '/content/scripts', $object);
     }
 }
